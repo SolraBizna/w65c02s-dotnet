@@ -187,7 +187,7 @@ namespace W65C02S {
             var pc = cpu.ReadPCPostIncrement();
             var addr = bus.ReadOperand(cpu, pc);
             var ea_low = bus.ReadPointer(cpu, (ushort)addr);
-            var ea_high = bus.ReadPointer(cpu, (ushort)(addr+1));
+            var ea_high = bus.ReadPointer(cpu, (ushort)(byte)(addr+1));
             return new SimpleEA(ea_high, ea_low);
         }
     }
@@ -195,7 +195,7 @@ namespace W65C02S {
         public SimpleEA GetOperand<B>(B bus, CPU cpu) where B: Bus {
             var pc = cpu.ReadPCPostIncrement();
             var staato = bus.ReadOperand(cpu, pc);
-            var ea = (ushort)(staato + (ushort)cpu.GetX());
+            var ea = (ushort)(byte)(staato + (byte)cpu.GetX());
             bus.ReadSpurious(cpu, (ushort)(cpu.GetPC()-1));
             return new SimpleEA(ea);
         }
@@ -204,10 +204,10 @@ namespace W65C02S {
         public SimpleEA GetOperand<B>(B bus, CPU cpu) where B: Bus {
             var pc = cpu.ReadPCPostIncrement();
             var staato = bus.ReadOperand(cpu, pc);
-            var addr = (ushort)(staato + (ushort)cpu.GetX());
+            var addr = (ushort)(byte)(staato + (ushort)cpu.GetX());
             bus.ReadSpurious(cpu, (ushort)(cpu.GetPC()-1));
             var ea_low = bus.ReadPointer(cpu, (ushort)addr);
-            var ea_high = bus.ReadPointer(cpu, (ushort)(addr + 1));
+            var ea_high = bus.ReadPointer(cpu, (ushort)(byte)(addr + 1));
             return new SimpleEA(ea_high, ea_low);
         }
     }
@@ -215,7 +215,7 @@ namespace W65C02S {
         public SimpleEA GetOperand<B>(B bus, CPU cpu) where B: Bus {
             var pc = cpu.ReadPCPostIncrement();
             var staato = bus.ReadOperand(cpu, pc);
-            var ea = (ushort)(staato + (short)cpu.GetY());
+            var ea = (ushort)(byte)(staato + (byte)cpu.GetY());
             bus.ReadSpurious(cpu, (ushort)(cpu.GetPC()-1));
             return new SimpleEA(ea);
         }
@@ -227,9 +227,9 @@ namespace W65C02S {
             var addr_low = bus.ReadPointer(cpu, (ushort)staato);
             var addr_high = bus.ReadPointer(cpu, (ushort)((staato + 1) & 0xFF));
             var addr = (ushort)((((ushort)addr_high) << 8) | (ushort)addr_low);
-            var ea = (ushort)(addr + (short)cpu.GetY());
+            var ea = (ushort)(addr + (ushort)cpu.GetY());
             if((ea & 0xFF00) != (addr & 0xFF00)) {
-                bus.ReadSpurious(cpu, (ushort)(staato + 1));
+                bus.ReadSpurious(cpu, (ushort)(byte)(staato + 1));
             }
             return new SimpleEA(ea);
         }
@@ -242,7 +242,7 @@ namespace W65C02S {
             var addr_high = bus.ReadPointer(cpu, (ushort)((staato + 1) & 0xFF));
             var addr = (ushort)((((ushort)addr_high) << 8) | (ushort)addr_low);
             var ea = (ushort)(addr + (short)cpu.GetY());
-            bus.ReadSpurious(cpu, (ushort)(staato + 1));
+            bus.ReadSpurious(cpu, (ushort)(byte)(staato + 1));
             return new SimpleEA(ea);
         }
     }

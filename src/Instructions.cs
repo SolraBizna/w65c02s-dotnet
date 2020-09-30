@@ -1,20 +1,17 @@
 namespace W65C02S {
     public partial class CPU {
         internal void brk<B>(B bus) where B: Bus {
-            var pc = ReadPCPostIncrement();
-            bus.ReadOperandSpurious(this, pc);
-            pc = GetPC();
+            bus.ReadOperandSpurious(this, ReadPCPostIncrement());
             Push(bus, (byte)(pc >> 8));
             Push(bus, (byte)pc);
-            Push(bus, (byte)(p | P_B));
+            Push(bus, (byte)(p | P_B | P_1));
             p &= (byte)(~P_D & 0xFF);
             p |= P_I;
             pc = (ushort)((pc & 0xFF00) | ((ushort)bus.ReadVector(this, IRQ_VECTOR)));
             pc = (ushort)((pc & 0x00FF) | (((ushort)bus.ReadVector(this, IRQ_VECTOR+1)) << 8));
         }
         internal void jsr<B>(B bus) where B: Bus {
-            var pc = ReadPCPostIncrement();
-            var target_lo = bus.ReadOperand(this, pc);
+            var target_lo = bus.ReadOperand(this, ReadPCPostIncrement());
             SpuriousStackRead(bus);
             Push(bus, (byte)(pc >> 8));
             Push(bus, (byte)pc);
@@ -403,7 +400,7 @@ namespace W65C02S {
                 else {
                     p |= P_C;
                 }
-                if(al >= 0x80) { val -= 0x06; }
+                if(al < 0) { val -= 0x06; }
                 NZP((byte)val);
             }
             else {

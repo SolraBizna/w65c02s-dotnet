@@ -248,7 +248,7 @@ namespace W65C02S {
                         bus.ReadSpurious(this, opcode_addr);
                         Push(bus, (byte)(opcode_addr >> 8));
                         Push(bus, (byte)(opcode_addr));
-                        Push(bus, (byte)(p & ((byte)(~P_B & 0xFF))));
+                        Push(bus, (byte)(p & ((byte)(~P_B & 0xFF)) | P_1));
                         p &= (byte)(~P_D & 0xFF);
                         p |= P_I;
                         pc = (ushort)((pc & 0xFF00)
@@ -266,7 +266,7 @@ namespace W65C02S {
                         bus.ReadSpurious(this, opcode_addr);
                         Push(bus, (byte)(opcode_addr >> 8));
                         Push(bus, (byte)(opcode_addr));
-                        Push(bus, p);
+                        Push(bus, (byte)(p | P_1));
                         p &= (byte)(~P_D & 0xFF);
                         p |= P_I;
                         pc = (ushort)((pc & 0xFF00)
