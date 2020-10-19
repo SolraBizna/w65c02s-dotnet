@@ -64,7 +64,7 @@ namespace W65C02S {
         private bool nmi = false, nmi_edge = false, nmi_pending = false;
         /// <summary>Resets the CPU. Execution will flounder for a few cycles,
         /// then fetch the reset vector and "start over".</summary>
-        public void reset() {
+        public void Reset() {
             state = State.HasBeenReset;
             s = 0;
             p = (byte)(P_1|P_I);
